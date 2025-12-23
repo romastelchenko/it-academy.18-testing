@@ -18,7 +18,7 @@ jobs:
           json_list="["
           files="$(find test_manifests -type f -name "*.yaml")"
           for file in $files; do
-            json_list+="\"${file}\","        
+            json_list+="\"${file}\","
           done
           json_list="${json_list%,}]"
 
@@ -45,7 +45,7 @@ jobs:
         run: |
           wget https://github.com/yannh/kubeconform/releases/download/v0.7.0/kubeconform-linux-amd64.tar.gz
           sudo tar -C /usr/local/bin/ -xzf kubeconform-linux-amd64.tar.gz
-          kubeconform --version
+          kubeconform -v
 
       - name: Validate manifest
         shell: bash
