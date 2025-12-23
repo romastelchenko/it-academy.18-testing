@@ -52,7 +52,7 @@ jobs:
       - name: Validate manifest
         shell: bash
         run: |
-          filename="echo ${{ matrix.manifest }} | cut -d '_' -f2-"
+          filename="$(echo ${{ matrix.manifest }} | cut -d '_' -f2-)"
 
           if kubeconform --summary "${filename}" > res.txt; then
             validation_result=":red_circle: ${filename} : $(cat res.txt)"
@@ -66,7 +66,7 @@ jobs:
         id: artifact_idx
         shell: bash
         run: |
-          file_idx="echo ${{ matrix.manifest }} | cut -d '_' -f1"
+          file_idx="$(echo ${{ matrix.manifest }} | cut -d '_' -f1)"
           echo "idx=${file_idx}" >> "$GITHUB_OUTPUT"
 
       - name: Upload result artifact
