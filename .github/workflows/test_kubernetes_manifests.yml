@@ -1,6 +1,6 @@
 name: "[18.Testing] Kubernetes manifests test"
 
-on: [push, pull request]
+on: [push, pull_request]
 
 jobs:
   extract_list_of_manifests:
