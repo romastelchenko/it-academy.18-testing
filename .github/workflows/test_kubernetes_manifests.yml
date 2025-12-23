@@ -55,9 +55,9 @@ jobs:
           filename="$(echo ${{ matrix.manifest }} | cut -d '_' -f2-)"
 
           if kubeconform --summary "${filename}" > res.txt; then
-            validation_result=":large_green_circle: ${filename}"
+            validation_result=":large_green_circle: ${filename} - OK"
           else
-            validation_result=":red_circle: ${filename} : $(cat res.txt)"
+            validation_result=":red_circle: $(cat res.txt)"
           fi
           echo "${validation_result}"
           echo "${validation_result}" > "validation_result.txt"
@@ -88,8 +88,8 @@ jobs:
 
       - name: Send slack notification
         run: |
-          report="$(find results -name "validation_result.txt" -print -exec cat {} \;)"
-          message_body_pattern='{"text":"Manifests from repo $GITHUB_REPOSITORY were validated:\n%s"}'
+          report="cat $(find results -name "validation_result.txt" -print)"
+          message_body_pattern='{"text":"*Manifests from repo ${{ GITHUB_REPOSITORY }} were validated:*\n%s"}'
           message_body=$(printf "${message_body_pattern}" "${report}")
           curl -X POST -H 'Content-type: application/json' --data "${message_body}" ${{ secrets.SECRET_SLACK_WEBHOOK_URL }}
 
