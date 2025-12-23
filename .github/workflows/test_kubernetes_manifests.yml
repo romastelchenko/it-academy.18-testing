@@ -6,7 +6,7 @@ jobs:
   extract_list_of_manifests:
     runs-on: ubuntu-latest
     outputs:
-      files: ${{ steps.set.outputs.manifests }}
+      manifests: ${{ steps.find_manifests.outputs.manifests }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        manifest: ${{ fromJson(needs.discover.outputs.manifests) }}
+        manifest: ${{ fromJson(needs.find_manifests.outputs.manifests) }}
     steps:
       - uses: actions/checkout@v4
 
