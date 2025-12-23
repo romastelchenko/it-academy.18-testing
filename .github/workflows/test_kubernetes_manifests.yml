@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        manifest: ${{ fromJson(needs.find_manifests.outputs.manifests) }}
+        manifest: ${{ fromJson(needs.extract_list_of_manifests.outputs.manifests) }}
     steps:
       - uses: actions/checkout@v4
 
