@@ -19,8 +19,12 @@ jobs:
 
       - name: Run docker image
         run: |
-          docker run -d -p 2222:2222 get_time_app
+          docker run -d --name get_time_app -p 2222:2222 get_time_app
 
+      - name: Check docker logs
+        run: |
+          docker logs get_time_app
+  
       - name: Test docker application
         run: |
           curl http://localhost:2222/time
