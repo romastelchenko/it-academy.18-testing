@@ -38,5 +38,9 @@ jobs:
 
       - name: Check if image has not root access inside
         run: |
-          date
-          echo "TODO"
+          docker_image_user="$(docker image inspect get_time_app --format='{{.Config.User}}')"
+          if [ -n "${docker_image_user}" ]; then
+            echo "Docker image has not root access inside. User: ${docker_image_user}"
+          else
+            echo "Docker has root access inside"
+          fi

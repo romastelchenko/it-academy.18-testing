@@ -1,0 +1,41 @@
+name: "[18.Testing] Kubernetes manifests test"
+
+on: [push, pull request]
+
+jobs:
+  extract_list_of_manifests:
+    runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.set.outputs.manifests }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - id: find_manifests
+        name: Find manifests
+        shell: bash
+        run: |
+          json_list="["
+          files="$(find test_manifests -type f -name "*.yaml")"
+          for file in $files; do
+            json_list+="${file},"        
+          done
+          json_list="${json_list%,}]"
+
+          echo "manifests=$json_list" >> "$GITHUB_OUTPUT"
+          echo "Manifests found: $json_list"
+
+  validate_manifests:
+    needs: extract_list_of_manifests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        manifest: ${{ fromJson(needs.discover.outputs.manifests) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print info
+        shell: bash
+        run: |
+          echo "Processing: ${{ matrix.manifest }}"
