@@ -17,8 +17,10 @@ jobs:
         run: |
           json_list="["
           files="$(find test_manifests -type f -name "*.yaml")"
+          i=1
           for file in $files; do
-            json_list+="\"${file}\","
+            json_list+="\"${i}_${file}\","
+            ((i++))
           done
           json_list="${json_list%,}]"
 
@@ -50,7 +52,7 @@ jobs:
       - name: Validate manifest
         shell: bash
         run: |
-          filename="${{ matrix.manifest }}"
+          filename="echo ${{ matrix.manifest }} | cut -d '_' -f2-"
 
           if kubeconform --summary "${filename}" > res.txt; then
             validation_result=":red_circle: ${filename} : $(cat res.txt)"
@@ -63,5 +65,5 @@ jobs:
       - name: Upload result artifact
         uses: actions/upload-artifact@v4
         with:
-          name: validation_result.txt
+          name: "validation_result_$(echo ${{ matrix.manifest }} | cut -d '_' -f1).txt"
           path: validation_result.txt
