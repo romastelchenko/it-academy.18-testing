@@ -57,7 +57,7 @@ jobs:
           if kubeconform --summary "${filename}" > res.txt; then
             validation_result=":large_green_circle: ${filename} - OK"
           else
-            validation_result=":red_circle: $(cat res.txt)"
+            validation_result=":red_circle: ${filename}\n\`\`\`$(cat res.txt)\`\`\`"
           fi
           echo "${validation_result}"
           echo "${validation_result}" > "validation_result.txt"
