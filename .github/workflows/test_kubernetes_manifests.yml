@@ -18,7 +18,7 @@ jobs:
           json_list="["
           files="$(find test_manifests -type f -name "*.yaml")"
           for file in $files; do
-            json_list+="${file},"        
+            json_list+="\"${file}\","        
           done
           json_list="${json_list%,}]"
 
